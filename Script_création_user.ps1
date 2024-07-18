@@ -16,8 +16,8 @@ function Get-UserInfo {
     $user.LastName = Read-Host "Nom de l'utilisateur"
     $user.Username = Read-Host "Nom d'utilisateur (login)"
     $user.Password = Read-Host -AsSecureString "Mot de passe"
-    $user.OU = Read-Host "OU (par exemple: 'OU=Users,DC=domain,DC=com')"
-    $user.HomeDirectory = Read-Host "\\\WIN-90LDUDNTQDE\Partages personnels utilisateurs\$user.FirstName.$user.LastName"
+    $user.OU = Read-Host "OU (par exemple: 'OU=Users,DC=axeplane,DC=loc')"
+    $user.HomeDirectory = Read-Host "Chemin du dossier perso"
     return $user
 }
 
