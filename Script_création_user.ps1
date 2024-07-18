@@ -17,7 +17,7 @@ function Get-UserInfo {
     $user.Username = Read-Host "Nom d'utilisateur (login)"
     $user.Password = Read-Host -AsSecureString "Mot de passe"
     $user.OU = Read-Host "OU (par exemple: 'OU=Users,DC=domain,DC=com')"
-    $user.HomeDirectory = Read-Host "Chemin du dossier personnel (par exemple: '\\fileserver\home\username')"
+    $user.HomeDirectory = Read-Host "\\\WIN-90LDUDNTQDE\Partages personnels utilisateurs\$user.FirstName.$user.LastName"
     return $user
 }
 
@@ -30,7 +30,7 @@ function Create-ADUser {
                -GivenName $user.FirstName `
                -Surname $user.LastName `
                -SamAccountName $user.Username `
-               -UserPrincipalName "$($user.Username)@domain.com" `
+               -UserPrincipalName "$($user.Username)@axeplane.loc" `
                -Path $user.OU `
                -AccountPassword $user.Password `
                -Enabled $true `
