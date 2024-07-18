@@ -1,3 +1,11 @@
+<#
+Auteur : Leslie Lemaire
+Date : 18/07/2024
+Version : 1.0
+Révisions :
+Description : Script de création utilisateur AD et du dossier partagé personnel à l'user
+#>
+
 # Charger le module Active Directory
 Import-Module ActiveDirectory
 
