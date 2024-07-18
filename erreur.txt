@@ -1,0 +1,28 @@
+Chemin du dossier perso : \\WIN-90LDUDNTQDE\Partages personnels utilisateurs
+New-ADUser : Objet de l’annuaire non trouvé
+Au caractère Ligne:29 : 5
++     New-ADUser -Name "$($user.FirstName) $($user.LastName)" `
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (CN=test testi,O...axeplane,DC=loc:String) [New-ADUser], ADIdentityNotFoundException
+    + FullyQualifiedErrorId : ActiveDirectoryCmdlet:Microsoft.ActiveDirectory.Management.ADIdentityNotFoundException,Microsoft.ActiveDirectory.Management.Commands.NewADUser
+ 
+New-Item : Le chemin d'accès n'a pas une forme conforme.
+Au caractère Ligne:49 : 5
++     New-Item -Path $path -ItemType Directory -Force
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument : (\\WIN-90LDUDNTQ...ls utilisateurs:String) [New-Item], ArgumentException
+    + FullyQualifiedErrorId : CreateDirectoryArgumentError,Microsoft.PowerShell.Commands.NewItemCommand
+ 
+Exception lors de l'appel de « SetAccessRule » avec « 1 » argument(s) : « Impossible de traduire certaines ou toutes les références d'identité. »
+Au caractère Ligne:53 : 5
++     $acl.SetAccessRule((New-Object System.Security.AccessControl.File ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [], MethodInvocationException
+    + FullyQualifiedErrorId : IdentityNotMappedException
+ 
+New-SmbShare : Le mappage entre les noms de compte et les ID de sécurité n’a pas été effectué. 
+Au caractère Ligne:57 : 5
++     New-SmbShare -Name $username -Path $path -FullAccess "$username"
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (MSFT_SMBShare:ROOT/Microsoft/Windows/SMB/MSFT_SMBShare) [New-SmbShare], CimException
+    + FullyQualifiedErrorId : Windows System Error 1332,New-SmbShare
