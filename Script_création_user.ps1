@@ -39,7 +39,7 @@ function Create-ADUser {
                    -Path $user.OU `
                    -AccountPassword $user.Password `
                    -Enabled $true `
-                   -HomeDirectory $user.HomeDirectory `
+                   -HomeDirectory $homeDirectory `
                    -HomeDrive $user.HomeDrive `
                    -PassThru
     } catch {
