@@ -1,6 +1,6 @@
 <#
 Auteur : Leslie Lemaire
-Date : 18/07/2024
+Date : 22/07/2024
 Version : 1.0
 Révisions :
 Description : Script permettant d’afficher et d’exporter la liste des groupes AD d’un utilisateur
