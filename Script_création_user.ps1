@@ -17,7 +17,7 @@ function Get-UserInfo {
     $user.Username = Read-Host "Nom d'utilisateur (login)"
     $user.Password = Read-Host -AsSecureString "Mot de passe"
     $user.OU = Read-Host "Chemin de l'OU (par exemple: 'OU=Users,DC=axeplane,DC=loc')"
-    $user.HomeDirectory = Read-Host "Chemin du dossier personnel (par exemple: '\\WIN-90LDUDNTQDE\Partages personnels utilisateurs\username')"
+    $user.HomeDrive = Read-Host "Lettre de lecteur pour le dossier personnel (par exemple: 'H:')"
     $user.SecurityGroup = Read-Host "Nom du groupe de sécurité (par exemple: 'GroupeSécurité')"
     return $user
 }
@@ -28,6 +28,9 @@ function Create-ADUser {
         [Parameter(Mandatory=$true)] $user
     )
     try {
+        # Définir le chemin du dossier personnel basé sur le login choisi
+        $homeDirectory = "\\WIN-90LDUDNTQDE\Partages personnels utilisateurs\$($user.Username)"
+
         New-ADUser -Name "$($user.FirstName) $($user.LastName)" `
                    -GivenName $user.FirstName `
                    -Surname $user.LastName `
@@ -37,7 +40,7 @@ function Create-ADUser {
                    -AccountPassword $user.Password `
                    -Enabled $true `
                    -HomeDirectory $user.HomeDirectory `
-                   -HomeDrive "Z:" `
+                   -HomeDrive $user.HomeDrive `
                    -PassThru
     } catch {
         Write-Host "Erreur lors de la création de l'utilisateur : $_"
@@ -50,7 +53,7 @@ function Configure-HomeDirectory {
     param (
         [Parameter(Mandatory=$true)] $user
     )
-    $path = $user.HomeDirectory -replace 'username', $user.Username
+    $path = "\\WIN-90LDUDNTQDE\Partages personnels utilisateurs\$($user.Username)"
     $username = $user.Username
     
     try {
@@ -65,8 +68,6 @@ function Configure-HomeDirectory {
         $acl.SetAccessRule($accessRule)
         Set-Acl $path $acl
 
-        # Partager le dossier
-        New-SmbShare -Name $username -Path $path -FullAccess "$username"
     } catch {
         Write-Host "Erreur lors de la configuration du dossier partagé : $_"
         exit 1
