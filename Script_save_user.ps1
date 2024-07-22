@@ -1,9 +1,9 @@
 <#
 Auteur : Leslie Lemaire
 Date : 22/07/2024
-Version : 1.1
+Version : 1.4
 Révisions :
-Description : Script pour sauvegarder les dossiers C:\Users des utilisateurs AD vers E:\Sauvegarde sur le serveur, en excluant le serveur local.
+Description : Script pour sauvegarder les dossiers C:\Users\<NomUtilisateur> des utilisateurs AD vers E:\Sauvegarde sur le serveur, en excluant le serveur local.
 #>
 
 # Charger le module Active Directory
@@ -13,24 +13,23 @@ Import-Module ActiveDirectory
 $serverBackupPath = "E:\Sauvegarde"
 
 # Nom de l'ordinateur local à exclure de la sauvegarde
-$localComputerName = "WIN-90LDUDNTQDE"
+$localComputerName = $env:COMPUTERNAME
 
 # Fonction pour obtenir la liste des utilisateurs du domaine
 function Get-UserList {
-    # Obtenir les utilisateurs avec leurs noms
     $users = Get-ADUser -Filter * | Select-Object -ExpandProperty SamAccountName
     return $users
 }
 
-# Fonction pour sauvegarder les données du dossier C:\Users d'un utilisateur depuis un ordinateur vers le serveur
+# Fonction pour sauvegarder les données du dossier C:\Users\<NomUtilisateur> d'un utilisateur depuis un ordinateur vers le serveur
 function Backup-UserData {
     param (
         [Parameter(Mandatory=$true)] [string]$userName,
         [Parameter(Mandatory=$true)] [string]$destinationPath
     )
 
-    # Nom de l'ordinateur à adapter (ici on suppose que le nom de l'ordinateur est le même que le nom d'utilisateur, ajustez si nécessaire)
-    $computerName = $userName  # Remplacez ceci par la logique appropriée pour obtenir le nom d'ordinateur si nécessaire
+    # Nom de l'ordinateur à adapter
+    $computerName = $userName
 
     # Vérifier si le nom de l'ordinateur est celui du serveur local
     if ($computerName -eq $localComputerName) {
@@ -43,17 +42,24 @@ function Backup-UserData {
     $backupPath = Join-Path -Path $destinationPath -ChildPath $userName
 
     try {
-        # Créer le répertoire de sauvegarde s'il n'existe pas
-        if (-Not (Test-Path -Path $backupPath)) {
-            New-Item -Path $backupPath -ItemType Directory -Force
-        }
+        # Vérifier si le partage est accessible
+        if (Test-Connection -ComputerName $computerName -Count 1 -Quiet) {
+            Write-Host "Connexion au partage $sourcePath réussie."
 
-        # Copier les données du dossier utilisateur vers le serveur
-        if (Test-Path -Path $sourcePath) {
-            Copy-Item -Path $sourcePath -Destination $backupPath -Recurse -Force
-            Write-Host "Les fichiers pour $userName ont été sauvegardés avec succès depuis $computerName."
+            if (Test-Path -Path $sourcePath) {
+                # Créer le répertoire de sauvegarde s'il n'existe pas
+                if (-Not (Test-Path -Path $backupPath)) {
+                    New-Item -Path $backupPath -ItemType Directory -Force
+                }
+
+                # Copier les données du dossier utilisateur vers le serveur
+                Copy-Item -Path $sourcePath -Destination $backupPath -Recurse -Force
+                Write-Host "Les fichiers pour $userName ont été sauvegardés avec succès depuis $computerName."
+            } else {
+                Write-Host "Le chemin source $sourcePath n'existe pas."
+            }
         } else {
-            Write-Host "Le chemin source $sourcePath n'existe pas."
+            Write-Host "La connexion au partage $sourcePath a échoué."
         }
     }
     catch {
