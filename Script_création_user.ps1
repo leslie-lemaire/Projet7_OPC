@@ -18,6 +18,7 @@ function Get-UserInfo {
     $user.Password = Read-Host -AsSecureString "Mot de passe"
     $user.OU = Read-Host "Chemin de l'OU (par exemple: 'OU=Users,DC=axeplane,DC=loc')"
     $user.HomeDirectory = Read-Host "Chemin du dossier personnel (par exemple: '\\WIN-90LDUDNTQDE\Partages personnels utilisateurs\username')"
+    $user.SecurityGroup = Read-Host "Nom du groupe de sécurité (par exemple: 'GroupeSécurité')"
     return $user
 }
 
@@ -36,7 +37,7 @@ function Create-ADUser {
                    -AccountPassword $user.Password `
                    -Enabled $true `
                    -HomeDirectory $user.HomeDirectory `
-                   -HomeDrive "H:" `
+                   -HomeDrive "Z:" `
                    -PassThru
     } catch {
         Write-Host "Erreur lors de la création de l'utilisateur : $_"
@@ -72,6 +73,19 @@ function Configure-HomeDirectory {
     }
 }
 
+# Fonction pour ajouter l'utilisateur au groupe de sécurité
+function Add-UserToSecurityGroup {
+    param (
+        [Parameter(Mandatory=$true)] $user
+    )
+    try {
+        Add-ADGroupMember -Identity $user.SecurityGroup -Members $user.Username
+    } catch {
+        Write-Host "Erreur lors de l'ajout de l'utilisateur au groupe de sécurité : $_"
+        exit 1
+    }
+}
+
 # Demander les informations de l'utilisateur
 $userInfo = Get-UserInfo
 
@@ -80,5 +94,8 @@ $user = Create-ADUser -user $userInfo
 
 # Configurer le dossier partagé personnel
 Configure-HomeDirectory -user $userInfo
+
+# Ajouter l'utilisateur au groupe de sécurité
+Add-UserToSecurityGroup -user $userInfo
 
 Write-Host "Utilisateur et dossier personnel créés avec succès."
