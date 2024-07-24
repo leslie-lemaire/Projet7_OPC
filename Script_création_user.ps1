@@ -31,16 +31,16 @@ function Create-ADUser {
         # Définir le chemin du dossier personnel basé sur le login choisi
         $homeDirectory = "\\WIN-90LDUDNTQDE\Partages personnels utilisateurs\$($user.Username)"
 
-        New-ADUser -Name "$($user.FirstName) $($user.LastName)" 
-                   -GivenName $user.FirstName 
-                   -Surname $user.LastName 
-                   -SamAccountName $user.Username 
-                   -UserPrincipalName "$($user.Username)@axeplane.loc" 
-                   -Path $user.OU 
-                   -AccountPassword $user.Password 
-                   -Enabled $true 
-                   -HomeDirectory $homeDirectory 
-                   -HomeDrive $user.HomeDrive 
+        New-ADUser -Name "$($user.FirstName) $($user.LastName)" `
+                   -GivenName $user.FirstName `
+                   -Surname $user.LastName `
+                   -SamAccountName $user.Username `
+                   -UserPrincipalName "$($user.Username)@axeplane.loc" `
+                   -Path $user.OU `
+                   -AccountPassword $user.Password `
+                   -Enabled $true `
+                   -HomeDirectory $homeDirectory `
+                   -HomeDrive $user.HomeDrive `
                    -PassThru
     } catch {
         Write-Host "Erreur lors de la création de l'utilisateur : $_"

@@ -1,4 +1,10 @@
-
+<#
+Auteur : Leslie Lemaire
+Date : 24/07/2024
+Version : 1.0
+Révisions :
+Description : Script de sauvegarde des données utilisateurs (C:\Users de chaque PC) dans le serveur (E:\Sauvegardes)
+#>
 
 Write-Host "Script de sauvegarde des données utilisateurs des Postes Clients 'C:\Utilisateurs' sur le Serveur 'WIN-90LDUDNTQDE' dans 'E:\Sauvegardes' * DÉMARRÉ *" -ForegroundColor Yellow -BackgroundColor Black
 
