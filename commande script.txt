@@ -1,1 +1,27 @@
 Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
+Get-GPOReport -All -ReportType Html -Path "C:\Scripts\GPO-All.html"
+
+# Importer le module Active Directory
+Import-Module ActiveDirectory
+
+# Lister tous les utilisateurs et exporter vers un fichier texte
+Get-ADUser -Filter * -Property DisplayName, SamAccountName | 
+Select-Object DisplayName, SamAccountName | 
+Out-File "C:\chemin\vers\fichier\utilisateurs.txt"
+
+
+# Importer le module Active Directory
+Import-Module ActiveDirectory
+
+# Lister tous les groupes de sécurité et exporter vers un fichier texte
+Get-ADGroup -Filter 'GroupCategory -eq "Security"' -Property Name, SamAccountName | 
+Select-Object Name, SamAccountName | 
+Out-File "C:\chemin\vers\fichier\groupes_securite.txt"
+
+
+# Lister tous les partages et exporter vers un fichier texte
+net share | Out-File "C:\chemin\vers\fichier\partages.txt"
+
+# Lister toutes les imprimantes avec détails et exporter vers un fichier texte
+Get-Printer | Select-Object Name, PrinterStatus, PortName, DriverName, ShareName, Shared, Location, Comment |
+Format-List | Out-File "C:\chemin\vers\fichier\imprimantes.txt"
