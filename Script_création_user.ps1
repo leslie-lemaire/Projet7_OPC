@@ -16,7 +16,7 @@ function Get-UserInfo {
     $user.LastName = Read-Host "Nom de l'utilisateur"
     $user.Username = Read-Host "Nom d'utilisateur (login)"
     $user.Password = Read-Host -AsSecureString "Mot de passe"
-    $user.OU = Read-Host "Chemin de l'OU (par exemple: 'OU=Users,DC=axeplane,DC=loc')"
+    $user.OU = (Get-ADOrganizationalUnit -Filter * | Out-GridView -Title "Choisissez une OU pour cet utilisateur" -PassThru).DistinguishedName
     $user.HomeDrive = Read-Host "Lettre de lecteur pour le dossier personnel (par exemple: 'H:')"
     $user.SecurityGroup = Read-Host "Nom du groupe de sécurité (par exemple: 'GroupeSécurité')"
     return $user
